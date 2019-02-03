@@ -5,41 +5,33 @@ _session = None
 _UrlToken = None
 _isLogin = None
 
-class MpWechat:
 
-    @staticmethod
-    def getSession():
-        global _session
-        if not _session:
-            _session = requests.Session()
-        return _session
+def getSession():
+    global _session
+    if not _session:
+        _session = requests.Session()
+    return _session
 
-    @staticmethod
-    def setUrlToken(urlToken):
-        _UrlToken = urlToken
 
-    @staticmethod
-    def getUrlToken():
-        return _UrlToken
+def setUrlToken(urlToken):
+    global _UrlToken
+    _UrlToken = urlToken
 
-    @staticmethod
-    def setisLogin(isLogin):
-        _isLogin = isLogin
 
-    @staticmethod
-    def getisLogin():
-        return _isLogin
+def getUrlToken():
+    global _UrlToken
+    return _UrlToken
 
-    @staticmethod
-    def saveToFile():
-        raise NotImplementedError()
-        # s = MpWechat.getSession()
-        # with open('mp.weixin.qq.com.session', 'wb') as f:
-        #     pickle.dump(s.cookies, f)
 
-    @staticmethod
-    def loadFromFile():
-        raise NotImplementedError()
+def saveToFile():
+    raise NotImplementedError()
+    # s = MpWechat.getSession()
+    # with open('mp.weixin.qq.com.session', 'wb') as f:
+    #     pickle.dump(s.cookies, f)
+
+
+def loadFromFile():
+    raise NotImplementedError()
 
 
 

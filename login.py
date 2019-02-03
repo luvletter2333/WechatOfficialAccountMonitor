@@ -1,4 +1,4 @@
-from session import MpWechat
+import session
 from PIL import Image
 from io import BytesIO
 import time
@@ -20,7 +20,7 @@ def Login(config,qrCallback,verifycodeCallback,verifycode=None,failCallback=None
         return False
     _isLogining = True
     # First Send Username And MD5(Password)
-    r = MpWechat.getSession().post("https://mp.weixin.qq.com/cgi-bin/bizlogin?action=startlogin",
+    r = session.getSession().post("https://mp.weixin.qq.com/cgi-bin/bizlogin?action=startlogin",
                                         data={
                                             "username": config["username"],
                                             "pwd": config["password_md5"],
@@ -41,7 +41,7 @@ def Login(config,qrCallback,verifycodeCallback,verifycode=None,failCallback=None
         logger.logger.info("Login First-Step Succeed")
         if __WaitForScan(config,qrCallback):
             logger.logger.info("Login Success!")
-            r = MpWechat.getSession().post("https://mp.weixin.qq.com/cgi-bin/bizlogin?action=login",
+            r = session.getSession().post("https://mp.weixin.qq.com/cgi-bin/bizlogin?action=login",
                                            data={
                                                "userlang": "zh_CN",
                                                "redirect_url": "",
@@ -59,10 +59,10 @@ def Login(config,qrCallback,verifycodeCallback,verifycode=None,failCallback=None
             redirect_url = r.json()["redirect_url"]
             url_token=regex.compile("token=[0-9]*").findall(redirect_url)[0].replace("token=","")
             logger.logger.info("Get Url_Token: "+url_token)
-            MpWechat.setUrlToken(url_token)
+            session.setUrlToken(url_token)
         else:
             # Timeout in scanning qrcode
-            MpWechat.getSession().cookies.clear()
+            session.getSession().cookies.clear()
             _isLogining = False
             return Login(config,qrCallback,verifycode,failCallback)
         _isLogining = False
@@ -71,7 +71,7 @@ def Login(config,qrCallback,verifycodeCallback,verifycode=None,failCallback=None
     # Return 200008 OR 200027 means it need VerifyCode Or bad VerifyCode
     elif ret_code == 200008 or ret_code == 200027:
         logger.logger.warning("Need verify code or wrong verify code")
-        ret = MpWechat.getSession().get("https://mp.weixin.qq.com/cgi-bin/verifycode?username=" + config["username"] + "&r=1549177766480")
+        ret = session.getSession().get("https://mp.weixin.qq.com/cgi-bin/verifycode?username=" + config["username"] + "&r=1549177766480")
         vc_img = Image.open(BytesIO(ret.content))
         _isLogining = False
         return Login(config,qrCallback,verifycodeCallback,verifycodeCallback(vc_img),failCallback)
@@ -98,12 +98,12 @@ def __WaitForScan(config,qrCallback):
     _referer = "https://mp.weixin.qq.com/cgi-bin/bizlogin?action=validate&lang=zh_CN&account=" + config["username_urlencode"] + "&token="
 
     # First `ask for loginqrcode` Request Will Respond ret:1 with msg:default
-    r = MpWechat.getSession().get("https://mp.weixin.qq.com/cgi-bin/loginqrcode?action=ask&token=&lang=zh_CN&f=json&ajax=1",
+    r = session.getSession().get("https://mp.weixin.qq.com/cgi-bin/loginqrcode?action=ask&token=&lang=zh_CN&f=json&ajax=1",
             headers={"Referer":_referer})
     logger.logger.debug(r.text)
 
     # Then Request QRCode Image
-    r_img = MpWechat.getSession().get("https://mp.weixin.qq.com/cgi-bin/loginqrcode?action=getqrcode&param=4300&rd=36",headers={"Referer":_referer})
+    r_img = session.getSession().get("https://mp.weixin.qq.com/cgi-bin/loginqrcode?action=getqrcode&param=4300&rd=36",headers={"Referer":_referer})
     i = Image.open(BytesIO(r_img.content))
 
     # Call `qrCallback` Async to inform you of scanning qrcode or you can customize your action
@@ -112,7 +112,7 @@ def __WaitForScan(config,qrCallback):
     # Check Scan Status
     while True:
         time.sleep(1.0)
-        r = MpWechat.getSession().get(
+        r = session.getSession().get(
             "https://mp.weixin.qq.com/cgi-bin/loginqrcode?action=ask&token=&lang=zh_CN&f=json&ajax=1",
             headers={"Referer": _referer})
         logger.logger.debug(r.text)
