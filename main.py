@@ -24,12 +24,24 @@ def callback_newMessage(messages):
     for msg in messages:
         print(msg)
 
-
 _config = Config.getConfig()
-if login.Login(_config,qrCallback=qrCallback,verifycodeCallback=callback_verifyCode):
-    logger.logger.debug("Login Success. Return to main function")
-    logger.logger.debug("Start Message Listener")
-    message.init(_config,callback_newMessage)
+
+
+if session.loadFromFile():
+    if session.checklogin():
+        logger.logger.info("Read Session Succeed!")
+    else:
+        logger.logger.info("Read Session Fail")
+        session.clear()
+
+if not session.checklogin():
+    if login.Login(_config,qrCallback=qrCallback,verifycodeCallback=callback_verifyCode):
+        logger.logger.debug("Login Success. Return to main function")
+        logger.logger.debug("Start Message Listener")
+        session.saveToFile()
+
+message.init(_config,callback_newMessage)
+
 
 input()
 

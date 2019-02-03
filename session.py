@@ -3,7 +3,6 @@ import pickle
 
 _session = None
 _UrlToken = None
-_isLogin = None
 
 
 def getSession():
@@ -24,19 +23,36 @@ def getUrlToken():
 
 
 def saveToFile():
-    raise NotImplementedError()
-    # s = MpWechat.getSession()
-    # with open('mp.weixin.qq.com.session', 'wb') as f:
-    #     pickle.dump(s.cookies, f)
+    #raise NotImplementedError()
+    s = dict()
+    s["session"] = _session
+    s["UrlToken"] = _UrlToken
+    with open('mp.weixin.qq.com.session', 'wb') as f:
+        pickle.dump(s, f)
 
 
 def loadFromFile():
-    raise NotImplementedError()
+    global _session
+    global _UrlToken
+    try:
+        with open('mp.weixin.qq.com.session', 'rb') as f:
+            s = pickle.load(f)
+    except:
+        return False
+    _session = s["session"]
+    _UrlToken = s["UrlToken"]
+    return True
 
 
+def checklogin():
+    ret = _session.get("https://mp.weixin.qq.com/cgi-bin/message?t=message/list&count=20&day=7&token="+str(_UrlToken)+"&lang=zh_CN&f=json")
+    ret_json = ret.json()
+    if not ret_json["base_resp"]["ret"] == 0:
+        return False
+    return True
 
-if __name__ == '__main__':
-    s1 = MpWechat.getSession()
-    s2 = MpWechat.getSession()
-    print(id(s1))
-    print(id(s2))
+
+def clear():
+    global _session,_UrlToken
+    _session = requests.session()
+    _UrlToken = None

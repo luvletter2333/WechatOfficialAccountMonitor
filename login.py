@@ -62,7 +62,7 @@ def Login(config,qrCallback,verifycodeCallback,verifycode=None,failCallback=None
             session.setUrlToken(url_token)
         else:
             # Timeout in scanning qrcode
-            session.getSession().cookies.clear()
+            session.clear()
             _isLogining = False
             return Login(config,qrCallback,verifycode,failCallback)
         _isLogining = False
