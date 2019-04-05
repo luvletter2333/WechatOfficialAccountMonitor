@@ -3,6 +3,7 @@ import login
 from config import Config
 import logger
 import message
+import comment
 
 
 logger.Init_Logger()
@@ -20,9 +21,17 @@ def callback_verifyCode(vc_image):
     return code
 
 
-def callback_newMessage(messages):
-    for msg in messages:
-        print(msg)
+def callback_newMessage(message):
+    print()
+    print(message)
+    print()
+
+
+def callback_newComment(comment):
+    print()
+    print(comment)
+    print()
+
 
 _config = Config.getConfig()
 
@@ -41,6 +50,7 @@ if not session.checklogin():
         session.saveToFile()
 
 message.init(_config,callback_newMessage)
+comment.init(_config,callback_newComment)
 
 
 input()

@@ -14,7 +14,7 @@ def Init_Logger():
     LOG_FORMAT = "[%(asctime)s] [%(levelname)s] %(message)s"
 
     logger = logging.getLogger()  # 不加名称设置root logger
-    logger.setLevel(logging.DEBUG)
+    logger.setLevel(log_level)
     formatter = logging.Formatter(LOG_FORMAT,datefmt='%Y-%m-%d %H:%M:%S')
     # 使用FileHandler输出到文件
     fh = logging.FileHandler('log.txt')

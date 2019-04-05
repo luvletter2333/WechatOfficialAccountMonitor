@@ -45,6 +45,8 @@ def loadFromFile():
 
 
 def checklogin():
+    if _UrlToken is None:
+        return False
     ret = _session.get("https://mp.weixin.qq.com/cgi-bin/message?t=message/list&count=20&day=7&token="+str(_UrlToken)+"&lang=zh_CN&f=json")
     ret_json = ret.json()
     if not ret_json["base_resp"]["ret"] == 0:

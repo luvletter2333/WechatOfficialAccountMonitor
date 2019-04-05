@@ -1,4 +1,5 @@
 {
-    "username": "your account",
-    "password": "your password"
+    "debug": false,
+    "username": "",
+    "password": ""
 }

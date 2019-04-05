@@ -39,7 +39,7 @@ def __run__():
     while True:
         if _stop_flag:
             break
-        sleep(1)
+        sleep(3)
         # Polling Start
         _found_head = False
         _page = 0
@@ -61,7 +61,8 @@ def __run__():
         for msg in new_message:
             logger.logger.warning("Receive New Message. id:"+ str(msg["id"]))
             #logger.logger.warning(str(json.dumps(msg)))
-        _newMessageCallback(new_message)
+            _newMessageCallback(new_message)
+        new_message.clear()
     _stop_flag = True
     _listen_thread = None
 
