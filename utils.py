@@ -10,6 +10,40 @@ def custom_time(timestamp):
     return dt
 
 
+def _ipython(local, banner):
+    from IPython.terminal.embed import InteractiveShellEmbed
+    from IPython.terminal.ipapp import load_default_config
+
+    InteractiveShellEmbed.clear_instance()
+    shell = InteractiveShellEmbed.instance(
+        banner1=banner,
+        user_ns=local,
+        config=load_default_config()
+    )
+    shell()
+
+
+def _bpython(local, banner):
+    # noinspection PyUnresolvedReferences,PyPackageRequirements
+    import bpython
+
+    bpython.embed(locals_=local, banner=banner)
+
+
+def _python(local, banner):
+    import code
+
+    try:
+        # noinspection PyUnresolvedReferences
+        import readline
+    except ImportError:
+        pass
+    else:
+        import rlcompleter
+        readline.parse_and_bind('tab:complete')
+
+    code.interact(local=local, banner=banner)
+
 def embed(local=None, banner='', shell=None):
     """
     | 进入交互式的 Python 命令行界面，并堵塞当前线程

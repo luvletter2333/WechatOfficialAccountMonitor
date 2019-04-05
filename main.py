@@ -10,7 +10,7 @@ import threading
 from itchat.content import TEXT
 from time import sleep
 from PIL import Image
-import utils
+from utils import embed,custom_time
 
 
 _config = Config.getConfig()
@@ -100,3 +100,4 @@ message.init(_config,callback_newMessage)
 comment.init(_config,callback_newComment)
 
 
+embed()
