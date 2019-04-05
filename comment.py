@@ -48,15 +48,21 @@ def __run__():
                     logger.logger.info("Tweet"+str(comment)+" Has new comments.")
                     # Get Comments
                     comments = __request_comment__(comment)
+                    title = comments["title"]
                     for i in range(0,new_counts[comment] - counts[comment]):
-                        new_comments.append(comments["comment"][i])
+                        cmt = comments["comment"][i]
+                        cmt["title"] = title
+                        new_comments.append(cmt)
             else:
                 # New Tweet
                 if(new_counts[comment]>0):
                     # Get Comments
                     comments = __request_comment__(comment)
+                    title = comments["title"]
                     for i in range(0,new_counts[comment]):
-                        new_comments.append(comments["comment"][i])
+                        cmt = comments["comment"][i]
+                        cmt["title"] = title
+                        new_comments.append(cmt)
         counts = new_counts
         # Polling end, handle new messages
         for msg in new_comments:

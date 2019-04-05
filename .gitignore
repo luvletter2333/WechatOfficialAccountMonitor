@@ -17,3 +17,7 @@ __pycache__/*
 # temporary images
 qrcode.jpg
 verifycode.jpg
+
+
+# itchat token
+itchat.pkl

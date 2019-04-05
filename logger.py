@@ -27,5 +27,4 @@ def Init_Logger():
     # 添加两个Handler
     logger.addHandler(ch)
     logger.addHandler(fh)
-    logger.info('this is info message')
-    logger.warning('this is warn message')
+

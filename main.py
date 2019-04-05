@@ -4,9 +4,7 @@ from config import Config
 import logger
 import message
 import comment
-
-
-logger.Init_Logger()
+import itchat
 
 
 def qrCallback(qrcode_image):
@@ -34,7 +32,9 @@ def callback_newComment(comment):
 
 
 _config = Config.getConfig()
-
+logger.Init_Logger()
+itchat.auto_login(enableCmdQR=2,hotReload=True)
+itchat.send_msg("itchat login succeed!","filehelper")
 
 if session.loadFromFile():
     if session.checklogin():
