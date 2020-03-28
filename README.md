@@ -1,2 +1,4 @@
 # WechatOfficialAccountMonitor
-A Python Monitor(Spider) of mp.weixin.qq.com. It Collects New Messages And Replies Below WechatTweet.
+
+A python monitor(spider) of mp.weixin.qq.com which collects new messages and replies in WechatTweet.
+
